@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Image Gallery</title>
     <link rel="stylesheet" href="style.css">
 </head>
@@ -23,21 +23,25 @@
     function loadImages() {
         var folderPath = "images/"; // Pfad zum Ordner mit den Bildern
 
-        // Ajax-Anfrage, um Bilder zu laden
+        // AJAX-Anfrage, um Bilder zu laden
         var xhr = new XMLHttpRequest();
         xhr.onreadystatechange = function() {
-            if (xhr.readyState === 4 && xhr.status === 200) {
-                var images = JSON.parse(xhr.responseText);
+            if (xhr.readyState === 4) {
+                if (xhr.status === 200) {
+                    var images = JSON.parse(xhr.responseText);
 
-                // Bilder zur Bildergalerie hinzufügen
-                images.forEach(function(image) {
-                    var img = document.createElement("img");
-                    img.src = folderPath + image;
-                    img.onclick = function() {
-                        openFullImg(this.src);
-                    };
-                    imgGallery.appendChild(img);
-                });
+                    // Bilder zur Bildergalerie hinzufügen
+                    images.forEach(function(image) {
+                        var img = document.createElement("img");
+                        img.src = folderPath + image;
+                        img.onclick = function() {
+                            openFullImg(this.src);
+                        };
+                        imgGallery.appendChild(img);
+                    });
+                } else {
+                    console.error('Fehler beim Laden der Bilder. Status: ' + xhr.status);
+                }
             }
         };
         xhr.open("GET", folderPath, true);
